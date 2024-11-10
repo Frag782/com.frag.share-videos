@@ -1,24 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../providers/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 export const LoginForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
-    const login = (e) => {
+    const { user, login } = useAuth();
+
+    useEffect(() => {if (user) navigate('/', { replace: true })}, [user])
+
+    const doLogin = (e) => {
         e.preventDefault();
-
-        fetch('http://localhost:3001/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email, password: password })
-        })
-            .then( response => response.json())
-            .then( data => { console.log(data.message) })
-            .catch( error => { console.error(error) })
+        login(email, password);
     }
 
     return (
-        <form onSubmit={login}>
+        <form onSubmit={doLogin}>
             <div>
                 <label>Adresse courriel</label>
                 <input type="email" required onChange={(e) => setEmail(e.target.value)}></input>

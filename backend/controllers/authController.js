@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 exports.greet = (req, res) => {
@@ -36,6 +37,11 @@ exports.login = async (req, res) => {
     if (!passwordMatch)
         return res.status(401).json({ message: 'Échec de la connexion.' });
 
-    req.session.user = { id: user.id, username: user.username };
-    return res.status(200).json({ message: `Connexion réussie pour l'utilisateur ${user.username}.` });
+    const token = jwt.sign(
+        { id: user.id, email: user.email, username: user.username },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+    );
+
+    return res.status(200).json({ token, message: `Connexion réussie pour l'utilisateur ${user.username}.` });
 }

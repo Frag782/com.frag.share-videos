@@ -1,0 +1,16 @@
+Client:
+Stocker JWT token dans sessionStorage
+Renvoyer token a chaque route protected
+
+Serveur:
+Envoyer JWT token a chaque login
+Creer routes api/protected avec middleware authenticateJWT (jwt.verify)
+
+Dans un premier temps, le token est stocké dans sessionStorage.
+Plus tard, on le stockera dans un cookie.
+Une fois les cookies mis en place, tester CSRF:
+
+1- Sans 'Same Site' policy:
+https://portswigger.net/web-security/csrf
+2- Avec 'Same Site' policy:
+https://portswigger.net/web-security/csrf/bypassing-samesite-restrictions
